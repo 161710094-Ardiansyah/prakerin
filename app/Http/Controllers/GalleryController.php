@@ -14,7 +14,9 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        //
+         //
+        $gallery = gallery::all();
+        return view('galeri.index',compact('gallery'));
     }
 
     /**
@@ -24,7 +26,9 @@ class GalleryController extends Controller
      */
     public function create()
     {
-        //
+         //
+        return view('galeri.create');
+
     }
 
     /**
@@ -35,7 +39,24 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         //
+         $this->validate($request,[
+            'gambar' => 'required',
+            
+        ]);
+        $gallery = new gallery;
+        
+        $gallery->gambar = $request->gambar;
+                if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $destinationPath = public_path().'/assets/img/fotoartikel/';
+            $filename = str_random(6).'_'.$file->getClientOriginalName();
+            $uploadSuccess = $file->move($destinationPath, $filename);
+            $artikel->foto = $filename;
+            }
+    
+        $gallery->save();
+        return redirect()->route('galeri.index');
     }
 
     /**
@@ -44,9 +65,10 @@ class GalleryController extends Controller
      * @param  \App\gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function show(gallery $gallery)
+    public function show($id)
     {
-        //
+        $gallery = gallery::findOrFail($id);
+        return view('galeri.show',compact('gallery'));
     }
 
     /**
@@ -55,9 +77,11 @@ class GalleryController extends Controller
      * @param  \App\gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function edit(gallery $gallery)
+    public function edit($id)
     {
-        //
+         //
+        $gallery = gallery::findOrFail($id);
+        return view('galeri.edit',compact('gallery'));
     }
 
     /**
@@ -67,9 +91,16 @@ class GalleryController extends Controller
      * @param  \App\gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, gallery $gallery)
+    public function update(Request $request,$id)
     {
-        //
+        $this->validate($request,[
+            'gambar' => 'required',
+            
+        ]);
+        $gallery = gallery::findOrFail($id);        
+        $gallery->gambar = $request->gambar;
+        $gallery->save();
+        return redirect()->route('galeri.index');
     }
 
     /**
@@ -78,8 +109,10 @@ class GalleryController extends Controller
      * @param  \App\gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function destroy(gallery $gallery)
+    public function destroy($id)
     {
-        //
+        $gallery = gallery::findOrFail($id);
+        $gallery->delete();
+        return redirect()->route('galeri.index');
     }
 }

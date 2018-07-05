@@ -15,7 +15,7 @@ class FasilitasController extends Controller
     public function index()
     {
         //
-        $penyalur = Penyalur::all();
+        $fasilitas = fasilitas::all();
         return view('fasilitas.index',compact('fasilitas'));
     }
 
@@ -50,7 +50,7 @@ class FasilitasController extends Controller
         $fasilitas->deskripsi = $request->deskripsi;
         $fasilitas->gambar = $request->gambar;
         $fasilitas->save();
-        return redirect()->route('penyalur.index');
+        return redirect()->route('fasilitas.index');
     }
 
     /**
@@ -74,7 +74,7 @@ class FasilitasController extends Controller
     public function edit($id)
     {
         //
-        $penyalur = fasilitas::findOrFail($id);
+        $fasilitas = fasilitas::findOrFail($id);
         return view('fasilitas.edit',compact('fasilitas'));
     }
 
@@ -94,7 +94,7 @@ class FasilitasController extends Controller
             'gambar' => 'required',
             
         ]);
-        $fasilitas = Penyalur::findOrFail($id);        
+        $fasilitas = fasilitas::findOrFail($id);        
         $fasilitas->judul = $request->judul;
         $fasilitas->deskripsi = $request->deskripsi;
         $fasilitas->gambar = $request->gambar;

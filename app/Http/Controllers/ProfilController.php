@@ -14,7 +14,8 @@ class ProfilController extends Controller
      */
     public function index()
     {
-        //
+        $profil = profil::all();
+        return view('profil.index',compact('profil'));
     }
 
     /**
@@ -25,6 +26,7 @@ class ProfilController extends Controller
     public function create()
     {
         //
+        return view('profil.create');
     }
 
     /**
@@ -35,7 +37,17 @@ class ProfilController extends Controller
      */
     public function store(Request $request)
     {
-        //
+          //
+         $this->validate($request,[
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            
+        ]);
+        $profil = new profil;
+        $profil->judul = $request->judul;
+        $profil->deskripsi = $request->deskripsi;
+        $profil->save();
+        return redirect()->route('profil.index');
     }
 
     /**
@@ -44,9 +56,10 @@ class ProfilController extends Controller
      * @param  \App\profil  $profil
      * @return \Illuminate\Http\Response
      */
-    public function show(profil $profil)
+    public function show($id)
     {
-        //
+        $profil = profil::findOrFail($id);
+        return view('profil.show',compact('profil'));
     }
 
     /**
@@ -55,9 +68,11 @@ class ProfilController extends Controller
      * @param  \App\profil  $profil
      * @return \Illuminate\Http\Response
      */
-    public function edit(profil $profil)
+    public function edit($id)
     {
-        //
+         //
+        $profil = profil::findOrFail($id);
+        return view('profil.edit',compact('profil'));
     }
 
     /**
@@ -67,9 +82,19 @@ class ProfilController extends Controller
      * @param  \App\profil  $profil
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, profil $profil)
+    public function update(Request $request, $id)
     {
         //
+        $this->validate($request,[
+            'judul' => 'required',
+            'deskripsi' => 'required',
+            
+        ]);
+        $profil = profil::findOrFail($id);        
+        $profil->judul = $request->judul;
+        $profil->deskripsi = $request->deskripsi;
+        $profil->save();
+        return redirect()->route('profil.index');
     }
 
     /**
@@ -78,8 +103,10 @@ class ProfilController extends Controller
      * @param  \App\profil  $profil
      * @return \Illuminate\Http\Response
      */
-    public function destroy(profil $profil)
+    public function destroy($id)
     {
-        //
+        $profil = profil::findOrFail($id);
+        $profil->delete();
+        return redirect()->route('profil.index');
     }
 }

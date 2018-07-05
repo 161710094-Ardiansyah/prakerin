@@ -12,10 +12,16 @@
 */
 
 Route::get('/', function () {
-    return view('layouts.admin');
+    return view('welcome');
 });
 
-// Route::resource('fasilitas','FasilitasController');
+ Route::resource('fasilitas','FasilitasController');
+ Route::resource('galeri','GalleryController');
+ Route::resource('profil','ProfilController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
